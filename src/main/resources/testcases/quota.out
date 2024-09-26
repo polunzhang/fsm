@@ -1,0 +1,49 @@
+💬 1: king @bot
+🤖: good to hear @1
+🤖: KnowledgeKing is started! 
+🤖: 0. 請問哪個 SQL 語句用於選擇所有的行？
+A) SELECT *
+B) SELECT ALL
+C) SELECT ROWS
+D) SELECT DATA 
+💬 1: king-stop @bot
+💬 1: 測試正常對話，現在 quota 應該剩下 15。 @bot
+🤖: thank you @1
+💬 1: king @bot
+🤖: How are you @1
+🤖: KnowledgeKing is started! 
+🤖: 0. 請問哪個 SQL 語句用於選擇所有的行？
+A) SELECT *
+B) SELECT ALL
+C) SELECT ROWS
+D) SELECT DATA 
+💬 1: king-stop @bot
+💬 1: 測試正常對話，現在 quota 應該剩下 10。 @bot
+🤖: good to hear @1
+💬 1: king @bot
+🤖: thank you @1
+🤖: KnowledgeKing is started! 
+🤖: 0. 請問哪個 SQL 語句用於選擇所有的行？
+A) SELECT *
+B) SELECT ALL
+C) SELECT ROWS
+D) SELECT DATA 
+💬 1: king-stop @bot
+💬 1: 測試正常對話，現在 quota 應該剩下 5。 @bot
+🤖: How are you @1
+💬 1: record @bot
+🤖: good to hear @1
+📢 1 is broadcasting...
+📢 1: 測試演講。
+💬 1: stop-recording @bot
+🤖: [Record Replay] 測試演講。 @1
+💬 1: 測試正常對話，現在 quota 應該剩下 2。 @bot
+🤖: thank you @1
+💬 1: record @bot
+🤖: How are you @1
+📢 1 is broadcasting...
+📢 1: 測試演講，現在 quota 應該剩下 2，不能錄音。
+💬 1: king @bot
+🤖: good to hear @1
+💬 1: 測試正常對話，現在 quota 應該剩下 2，不能玩 Knowledge King。 @bot
+🤖: thank you @1
