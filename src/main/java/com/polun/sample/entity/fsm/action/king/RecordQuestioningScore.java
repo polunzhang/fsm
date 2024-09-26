@@ -6,11 +6,11 @@ import com.polun.sample.entity.bot.Bot;
 import com.polun.sample.entity.community.Tags;
 import com.polun.sample.entity.community.UserId;
 import com.polun.sample.entity.community.chatroom.Message;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import java.util.List;
 
-public class RecordQuestioningScore implements Action<SampleState, Event> {
+public class RecordQuestioningScore implements Action<SampleState, SampleEvent> {
   private final Bot bot;
 
   public RecordQuestioningScore(Bot bot) {
@@ -18,7 +18,7 @@ public class RecordQuestioningScore implements Action<SampleState, Event> {
   }
 
   @Override
-  public void run(Context<SampleState, Event> context) {
+  public void run(Context<SampleState, SampleEvent> context) {
     context
         .getPayload(Message.class)
         .ifPresent(

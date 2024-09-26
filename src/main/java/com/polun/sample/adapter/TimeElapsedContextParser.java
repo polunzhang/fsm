@@ -1,10 +1,10 @@
 package com.polun.sample.adapter;
 
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import java.util.regex.Pattern;
 
-public class TimeElapsedContextParser extends ContextParser<SampleState, Event> {
+public class TimeElapsedContextParser extends ContextParser<SampleState, SampleEvent> {
   public static final String SECONDS = "seconds";
   public static final String MINUTES = "minutes";
   public static final String HOURS = "hours";
@@ -13,7 +13,7 @@ public class TimeElapsedContextParser extends ContextParser<SampleState, Event> 
       String.format("\\[(\\d+)\\s+(%s|%s|%s)\\s+elapsed\\]", SECONDS, MINUTES, HOURS);
   public static final Pattern PATTERN = Pattern.compile(REGEX);
 
-  public TimeElapsedContextParser(ContextParser<SampleState, Event> next) {
+  public TimeElapsedContextParser(ContextParser<SampleState, SampleEvent> next) {
     super(next);
   }
 
@@ -28,8 +28,8 @@ public class TimeElapsedContextParser extends ContextParser<SampleState, Event> 
   }
 
   @Override
-  protected Event getEvent() {
-    return Event.TIME_ELAPSED;
+  protected SampleEvent getEvent() {
+    return SampleEvent.TIME_ELAPSED;
   }
 
   @Override

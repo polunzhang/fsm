@@ -5,11 +5,11 @@ import com.polun.fsm.action.Action;
 import com.polun.sample.entity.bot.Bot;
 import com.polun.sample.entity.community.Tags;
 import com.polun.sample.entity.community.forum.Post;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import java.util.List;
 
-public class CommentAndTagAuthor implements Action<SampleState, Event> {
+public class CommentAndTagAuthor implements Action<SampleState, SampleEvent> {
   private final Bot bot;
 
   private final String content;
@@ -20,7 +20,7 @@ public class CommentAndTagAuthor implements Action<SampleState, Event> {
   }
 
   @Override
-  public void run(Context<SampleState, Event> context) {
+  public void run(Context<SampleState, SampleEvent> context) {
     context
         .getPayload(Post.class)
         .ifPresent(

@@ -5,10 +5,10 @@ import com.polun.fsm.guard.Guard;
 import com.polun.sample.entity.bot.Bot;
 import com.polun.sample.entity.community.User;
 import com.polun.sample.entity.community.chatroom.Message;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class PermissionGuard implements Guard<SampleState, Event> {
+public class PermissionGuard implements Guard<SampleState, SampleEvent> {
 
   private final Bot bot;
 
@@ -20,7 +20,7 @@ public class PermissionGuard implements Guard<SampleState, Event> {
   }
 
   @Override
-  public boolean test(Context<SampleState, Event> context) {
+  public boolean test(Context<SampleState, SampleEvent> context) {
 
     if (isAdmin == null) return true;
 

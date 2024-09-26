@@ -1,11 +1,11 @@
 package com.polun.sample.adapter;
 
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class NewPostContextParser extends ContextParser<SampleState, Event> {
+public class NewPostContextParser extends ContextParser<SampleState, SampleEvent> {
 
-  public NewPostContextParser(ContextParser<SampleState, Event> next) {
+  public NewPostContextParser(ContextParser<SampleState, SampleEvent> next) {
     super(next);
   }
 
@@ -15,8 +15,8 @@ public class NewPostContextParser extends ContextParser<SampleState, Event> {
   }
 
   @Override
-  protected Event getEvent() {
-    return Event.NEW_POST;
+  protected SampleEvent getEvent() {
+    return SampleEvent.NEW_POST;
   }
 
   @Override

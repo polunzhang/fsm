@@ -8,7 +8,7 @@ import com.polun.sample.entity.community.broadcast.Speak;
 import com.polun.sample.entity.community.chatroom.Message;
 import com.polun.sample.entity.community.forum.Comment;
 import com.polun.sample.entity.community.forum.PostId;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import java.util.List;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Bot {
 
   private Community community;
 
-  @Setter private FiniteStateMachine<SampleState, Event> fsm;
+  @Setter private FiniteStateMachine<SampleState, SampleEvent> fsm;
 
   public Bot() {
     this.records = new Records();

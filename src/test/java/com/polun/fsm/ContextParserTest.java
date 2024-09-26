@@ -9,7 +9,7 @@ import com.polun.sample.adapter.NewPostContextParser;
 import com.polun.sample.adapter.StartBroadcastContextParser;
 import com.polun.sample.adapter.StopBroadcastContextParser;
 import com.polun.sample.adapter.TimeElapsedContextParser;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 class ContextParserTest {
 
   public static final String PATH = "src/main/resources/testcases/";
-  private ContextParser<SampleState, Event> parser;
+  private ContextParser<SampleState, SampleEvent> parser;
 
   @BeforeEach
   void setUp() {

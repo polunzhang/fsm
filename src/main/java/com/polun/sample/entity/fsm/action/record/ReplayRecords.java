@@ -7,11 +7,11 @@ import com.polun.sample.entity.bot.Records;
 import com.polun.sample.entity.community.Tags;
 import com.polun.sample.entity.community.UserId;
 import com.polun.sample.entity.community.broadcast.Speak;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import java.util.List;
 
-public class ReplayRecords implements Action<SampleState, Event> {
+public class ReplayRecords implements Action<SampleState, SampleEvent> {
   private final Bot bot;
 
   public ReplayRecords(Bot bot) {
@@ -19,7 +19,7 @@ public class ReplayRecords implements Action<SampleState, Event> {
   }
 
   @Override
-  public void run(Context<SampleState, Event> context) {
+  public void run(Context<SampleState, SampleEvent> context) {
     Records records = bot.getRecords();
     String[] content = records.getReplay().stream().map(Speak::context).toArray(String[]::new);
     if (content.length != 0) {

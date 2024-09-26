@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FSMObserver implements
-    com.polun.sample.entity.community.ContextObserver<SampleState, Event> {
-  private final FiniteStateMachine<SampleState, Event> fsm;
+    com.polun.sample.entity.community.ContextObserver<SampleState, SampleEvent> {
+  private final FiniteStateMachine<SampleState, SampleEvent> fsm;
 
   @Override
-  public void update(Context<SampleState, Event> event) {
+  public void update(Context<SampleState, SampleEvent> event) {
   }
 }

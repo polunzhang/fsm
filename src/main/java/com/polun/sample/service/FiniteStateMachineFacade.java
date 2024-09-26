@@ -7,7 +7,7 @@ import com.polun.fsm.guard.CompositeGuard;
 import com.polun.fsm.state.Transition;
 import com.polun.sample.entity.bot.Bot;
 import com.polun.sample.entity.fsm.Command;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import com.polun.sample.entity.fsm.action.common.DecreaseQuota;
 import com.polun.sample.entity.fsm.action.common.EnterState;
@@ -33,7 +33,7 @@ public class FiniteStateMachineFacade {
     this.botManageService = new BotManageService(bot);
   }
 
-  public void subscribeCommunity(Bot bot, FiniteStateMachine<SampleState, Event> fsm) {
+  public void subscribeCommunity(Bot bot, FiniteStateMachine<SampleState, SampleEvent> fsm) {
     bot.getCommunity()
         .subscribe(
             event -> {
@@ -43,28 +43,28 @@ public class FiniteStateMachineFacade {
             });
   }
 
-  public FiniteStateMachine<SampleState, Event> getDefaultFSM(Bot bot) {
+  public FiniteStateMachine<SampleState, SampleEvent> getDefaultFSM(Bot bot) {
     Command recordCommand = new Command("record", 1);
     Command kingCommand = new Command("king", 3);
-    FiniteStateMachine<SampleState, Event> fsm =
-        new FiniteStateMachineBuilder<SampleState, Event>()
+    FiniteStateMachine<SampleState, SampleEvent> fsm =
+        new FiniteStateMachineBuilder<SampleState, SampleEvent>()
             .initialState(SampleState.NORMAL)
             .states(
                 botManageService.getState(SampleState.NORMAL),
                 botManageService.getState(SampleState.KNOWLEDGE_KING),
                 botManageService.getState(SampleState.RECORD))
             .transitions(
-                Transition.<SampleState, Event>builder()
+                Transition.<SampleState, SampleEvent>builder()
                     .source(SampleState.NORMAL)
                     .target(SampleState.RECORD)
-                    .event(Event.NEW_MESSAGE)
+                    .event(SampleEvent.NEW_MESSAGE)
                     .guard(new CommandGuard(recordCommand))
                     .action(new DecreaseQuota(recordCommand))
                     .build(),
-                Transition.<SampleState, Event>builder()
+                Transition.<SampleState, SampleEvent>builder()
                     .source(SampleState.NORMAL)
                     .target(SampleState.KNOWLEDGE_KING)
-                    .event(Event.NEW_MESSAGE)
+                    .event(SampleEvent.NEW_MESSAGE)
                     .guard(
                         new CompositeGuard<>(
                             new CommandGuard(kingCommand),
@@ -76,73 +76,73 @@ public class FiniteStateMachineFacade {
 
     botManageService.addTrigger(
         SampleState.KNOWLEDGE_KING,
-        new TriggerBuilder<SampleState, Event>()
+        new TriggerBuilder<SampleState, SampleEvent>()
             .guard(
                 new CommandGuard(new Command("king-stop", 0)),
                 new PermissionGuard(bot, true),
                 new TagGuard(bot.getUser().getUserId()))
-            .event(Event.NEW_MESSAGE)
+            .event(SampleEvent.NEW_MESSAGE)
             .action(new EnterState<>(fsm, SampleState.NORMAL))
             .build());
 
     botManageService.addTrigger(
         SampleState.THANKS_FOR_JOINING,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.TIME_ELAPSED)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.TIME_ELAPSED)
             .guard(new TimeElapsedGuard(20 * 1000L))
             .action(new EnterState<>(fsm, SampleState.NORMAL))
             .build());
 
     botManageService.addTrigger(
         SampleState.QUESTIONING,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.NEW_MESSAGE)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.NEW_MESSAGE)
             .guard(new TagGuard(bot.getUser().getUserId()), new AnswerCorrectGuard(bot))
             .action(new RecordQuestioningScore(bot), new AskQuestion(bot))
             .build());
 
     botManageService.addTrigger(
         SampleState.RECORD,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.NEW_MESSAGE)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.NEW_MESSAGE)
             .guard(new CommandGuard(new Command("stop-recording", 0)), new RecorderGuard(bot))
             .action(new EnterState<>(fsm, SampleState.NORMAL))
             .build());
 
     botManageService.addTrigger(
         SampleState.RECORDING,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.BROADCASTING_SPEAK)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.BROADCASTING_SPEAK)
             .action(new DoRecording(bot))
             .build());
 
     botManageService.addTrigger(
         SampleState.INTERACTING,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.NEW_MESSAGE)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.NEW_MESSAGE)
             .guard(new ConverseGuard(bot))
             .action(new Converse(bot, "Hi hi😁", "I like your idea!"))
             .build());
 
     botManageService.addTrigger(
         SampleState.INTERACTING,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.NEW_POST)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.NEW_POST)
             .action(new CommentAndTagAllOnlineUsers(bot, "How do you guys think about it?"))
             .build());
 
     botManageService.addTrigger(
         SampleState.DEFAULT_CONVERSATION,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.NEW_MESSAGE)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.NEW_MESSAGE)
             .guard(new ConverseGuard(bot))
             .action(new Converse(bot, "good to hear", "thank you", "How are you"))
             .build());
 
     botManageService.addTrigger(
         SampleState.DEFAULT_CONVERSATION,
-        new TriggerBuilder<SampleState, Event>()
-            .event(Event.NEW_POST)
+        new TriggerBuilder<SampleState, SampleEvent>()
+            .event(SampleEvent.NEW_POST)
             .action(new CommentAndTagAuthor(bot, "Nice post"))
             .build());
 

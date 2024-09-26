@@ -14,13 +14,13 @@ import com.polun.sample.entity.community.Community;
 import com.polun.sample.entity.community.broadcast.Broadcast;
 import com.polun.sample.entity.community.chatroom.ChatRoom;
 import com.polun.sample.entity.community.forum.Forum;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import com.polun.sample.service.FiniteStateMachineFacade;
 
 public class CommunityApplication {
 
-  public static final ContextParser<SampleState, Event> CONTEXT_PARSER =
+  public static final ContextParser<SampleState, SampleEvent> CONTEXT_PARSER =
       new BroadcastingSpeakContextParser(
           new LoginContextParser(
               new LogoutContextParser(

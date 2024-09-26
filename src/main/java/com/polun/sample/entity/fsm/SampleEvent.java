@@ -1,6 +1,6 @@
 package com.polun.sample.entity.fsm;
 
-public enum Event {
+public enum SampleEvent {
   END,
   START,
   LOGIN,

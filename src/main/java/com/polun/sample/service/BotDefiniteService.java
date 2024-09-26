@@ -9,7 +9,7 @@ import com.polun.fsm_plugin.CompositeState;
 import com.polun.fsm_plugin.StateBuilder;
 import com.polun.sample.entity.bot.Bot;
 import com.polun.sample.entity.fsm.Command;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import com.polun.sample.entity.fsm.action.common.SendMessage;
 import com.polun.sample.entity.fsm.action.king.AskQuestion;
@@ -33,37 +33,37 @@ public class BotDefiniteService {
   }
 
   @SuppressWarnings("unchecked")
-  public State<SampleState, Event> getRecordState(State<SampleState, Event>... states) {
+  public State<SampleState, SampleEvent> getRecordState(State<SampleState, SampleEvent>... states) {
     InitializeRecordState entryAction = new InitializeRecordState(bot);
-    CompositeState<SampleState, Event> state =
-        new StateBuilder<SampleState, Event>()
+    CompositeState<SampleState, SampleEvent> state =
+        new StateBuilder<SampleState, SampleEvent>()
             .id(SampleState.RECORD)
             .entryAction(new CompositeAction<>(new StartRecording(bot), entryAction))
             .initialState(SampleState.RECORDING)
             .states(states)
             .transitions(
-                Transition.<SampleState, Event>builder()
+                Transition.<SampleState, SampleEvent>builder()
                     .source(SampleState.WAITING)
                     .target(SampleState.RECORDING)
-                    .event(Event.START_BROADCAST)
+                    .event(SampleEvent.START_BROADCAST)
                     .build(),
-                Transition.<SampleState, Event>builder()
+                Transition.<SampleState, SampleEvent>builder()
                     .source(SampleState.RECORDING)
                     .target(SampleState.WAITING)
-                    .event(Event.STOP_BROADCAST)
+                    .event(SampleEvent.STOP_BROADCAST)
                     .build())
             .buildCompositeState();
     entryAction.setFsm(state);
     return state;
   }
 
-  public State<SampleState, Event> getWaitingState() {
-    return new StateBuilder<SampleState, Event>().id(SampleState.WAITING).build();
+  public State<SampleState, SampleEvent> getWaitingState() {
+    return new StateBuilder<SampleState, SampleEvent>().id(SampleState.WAITING).build();
   }
 
   @SuppressWarnings("unchecked")
-  public State<SampleState, Event> getRecordingState() {
-    return new StateBuilder<SampleState, Event>()
+  public State<SampleState, SampleEvent> getRecordingState() {
+    return new StateBuilder<SampleState, SampleEvent>()
         .id(SampleState.RECORDING)
         .entryAction(new StartRecording(bot))
         .exitAction(new ReplayRecords(bot))
@@ -71,29 +71,29 @@ public class BotDefiniteService {
   }
 
   @SuppressWarnings("unchecked")
-  public State<SampleState, Event> getKnowledgeKing(State<SampleState, Event>... states) {
-    return new StateBuilder<SampleState, Event>()
+  public State<SampleState, SampleEvent> getKnowledgeKing(State<SampleState, SampleEvent>... states) {
+    return new StateBuilder<SampleState, SampleEvent>()
         .id(SampleState.KNOWLEDGE_KING)
         .initialState(SampleState.QUESTIONING)
         .entryAction(new SendMessage(bot, "KnowledgeKing is started!"))
         .states(states)
         .transitions(
-            Transition.<SampleState, Event>builder()
+            Transition.<SampleState, SampleEvent>builder()
                 .source(SampleState.QUESTIONING)
                 .target(SampleState.THANKS_FOR_JOINING)
-                .event(Event.TIME_ELAPSED)
+                .event(SampleEvent.TIME_ELAPSED)
                 .guard(new TimeElapsedGuard(60 * 60 * 1000L))
                 .build(),
-            Transition.<SampleState, Event>builder()
+            Transition.<SampleState, SampleEvent>builder()
                 .source(SampleState.QUESTIONING)
                 .target(SampleState.THANKS_FOR_JOINING)
-                .event(Event.NEW_MESSAGE)
+                .event(SampleEvent.NEW_MESSAGE)
                 .guard(new QuestionGroupAllAnsweredGuard(bot))
                 .build(),
-            Transition.<SampleState, Event>builder()
+            Transition.<SampleState, SampleEvent>builder()
                 .source(SampleState.THANKS_FOR_JOINING)
                 .target(SampleState.QUESTIONING)
-                .event(Event.NEW_MESSAGE)
+                .event(SampleEvent.NEW_MESSAGE)
                 .guard(
                     new CompositeGuard<>(
                         new CommandGuard(new Command("play again", 5)),
@@ -103,42 +103,42 @@ public class BotDefiniteService {
         .buildCompositeState();
   }
 
-  public State<SampleState, Event> getThanksForJoining() {
-    return new StateBuilder<SampleState, Event>()
+  public State<SampleState, SampleEvent> getThanksForJoining() {
+    return new StateBuilder<SampleState, SampleEvent>()
         .id(SampleState.THANKS_FOR_JOINING)
         .entryAction((new SendQuestioningResult(bot)))
         .build();
   }
 
   @SuppressWarnings("unchecked")
-  public State<SampleState, Event> getQuestioning() {
-    return new StateBuilder<SampleState, Event>()
+  public State<SampleState, SampleEvent> getQuestioning() {
+    return new StateBuilder<SampleState, SampleEvent>()
         .id(SampleState.QUESTIONING)
         .entryAction(new CompositeAction<>(new ResetQuestionGroup(bot), new AskQuestion(bot)))
         .build();
   }
 
   @SuppressWarnings("unchecked")
-  public State<SampleState, Event> getNormaState(State<SampleState, Event>... states) {
+  public State<SampleState, SampleEvent> getNormaState(State<SampleState, SampleEvent>... states) {
     OnlineUserLimitReached onlineUserLimitReached = new OnlineUserLimitReached(bot, 10);
     InitializeNormalState entryAction = new InitializeNormalState(onlineUserLimitReached);
     var state =
-        new StateBuilder<SampleState, Event>()
+        new StateBuilder<SampleState, SampleEvent>()
             .id(SampleState.NORMAL)
             .initialState(SampleState.DEFAULT_CONVERSATION)
             .entryAction(entryAction)
             .states(states)
             .transitions(
-                Transition.<SampleState, Event>builder()
+                Transition.<SampleState, SampleEvent>builder()
                     .source(SampleState.INTERACTING)
                     .target(SampleState.DEFAULT_CONVERSATION)
-                    .event(Event.LOGOUT)
+                    .event(SampleEvent.LOGOUT)
                     .guard(new ReverseGuard<>(onlineUserLimitReached))
                     .build(),
-                Transition.<SampleState, Event>builder()
+                Transition.<SampleState, SampleEvent>builder()
                     .source(SampleState.DEFAULT_CONVERSATION)
                     .target(SampleState.INTERACTING)
-                    .event(Event.LOGIN)
+                    .event(SampleEvent.LOGIN)
                     .guard(onlineUserLimitReached)
                     .build())
             .buildCompositeState();
@@ -147,12 +147,12 @@ public class BotDefiniteService {
   }
 
   @SuppressWarnings("unchecked")
-  public State<SampleState, Event> getInteracting() {
-    return new StateBuilder<SampleState, Event>().id(SampleState.INTERACTING).build();
+  public State<SampleState, SampleEvent> getInteracting() {
+    return new StateBuilder<SampleState, SampleEvent>().id(SampleState.INTERACTING).build();
   }
 
   @SuppressWarnings("unchecked")
-  public State<SampleState, Event> getDefaultConversation() {
-    return new StateBuilder<SampleState, Event>().id(SampleState.DEFAULT_CONVERSATION).build();
+  public State<SampleState, SampleEvent> getDefaultConversation() {
+    return new StateBuilder<SampleState, SampleEvent>().id(SampleState.DEFAULT_CONVERSATION).build();
   }
 }

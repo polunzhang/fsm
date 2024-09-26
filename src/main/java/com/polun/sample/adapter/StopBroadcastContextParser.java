@@ -1,11 +1,11 @@
 package com.polun.sample.adapter;
 
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class StopBroadcastContextParser extends ContextParser<SampleState, Event> {
+public class StopBroadcastContextParser extends ContextParser<SampleState, SampleEvent> {
 
-  public StopBroadcastContextParser(ContextParser<SampleState, Event> next) {
+  public StopBroadcastContextParser(ContextParser<SampleState, SampleEvent> next) {
     super(next);
   }
 
@@ -15,8 +15,8 @@ public class StopBroadcastContextParser extends ContextParser<SampleState, Event
   }
 
   @Override
-  protected Event getEvent() {
-    return Event.STOP_BROADCAST;
+  protected SampleEvent getEvent() {
+    return SampleEvent.STOP_BROADCAST;
   }
 
   @Override

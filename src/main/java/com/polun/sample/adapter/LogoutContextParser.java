@@ -1,11 +1,11 @@
 package com.polun.sample.adapter;
 
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class LogoutContextParser extends ContextParser<SampleState, Event> {
+public class LogoutContextParser extends ContextParser<SampleState, SampleEvent> {
 
-  public LogoutContextParser(ContextParser<SampleState, Event> next) {
+  public LogoutContextParser(ContextParser<SampleState, SampleEvent> next) {
     super(next);
   }
 
@@ -15,8 +15,8 @@ public class LogoutContextParser extends ContextParser<SampleState, Event> {
   }
 
   @Override
-  protected Event getEvent() {
-    return Event.LOGOUT;
+  protected SampleEvent getEvent() {
+    return SampleEvent.LOGOUT;
   }
 
   @Override

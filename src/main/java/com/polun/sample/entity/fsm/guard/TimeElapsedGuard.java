@@ -3,10 +3,10 @@ package com.polun.sample.entity.fsm.guard;
 import com.polun.fsm.context.Context;
 import com.polun.fsm.guard.Guard;
 import com.polun.sample.entity.community.TimeElapsed;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class TimeElapsedGuard implements Guard<SampleState, Event> {
+public class TimeElapsedGuard implements Guard<SampleState, SampleEvent> {
 
   private final long milliseconds;
 
@@ -20,7 +20,7 @@ public class TimeElapsedGuard implements Guard<SampleState, Event> {
   }
 
   @Override
-  public boolean test(Context<SampleState, Event> context) {
+  public boolean test(Context<SampleState, SampleEvent> context) {
     elapsedTime += context.getPayload(TimeElapsed.class).orElseThrow().millis();
     return milliseconds <= elapsedTime;
   }

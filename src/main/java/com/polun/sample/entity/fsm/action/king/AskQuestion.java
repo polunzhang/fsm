@@ -4,10 +4,10 @@ import com.polun.fsm.context.Context;
 import com.polun.fsm.action.Action;
 import com.polun.sample.entity.bot.Bot;
 import com.polun.sample.entity.bot.QuestionGroup;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class AskQuestion implements Action<SampleState, Event> {
+public class AskQuestion implements Action<SampleState, SampleEvent> {
 
   private final Bot bot;
 
@@ -16,7 +16,7 @@ public class AskQuestion implements Action<SampleState, Event> {
   }
 
   @Override
-  public void run(Context<SampleState, Event> context) {
+  public void run(Context<SampleState, SampleEvent> context) {
     QuestionGroup questionGroup = bot.getQuestionGroup();
     if (!questionGroup.allAnswered()) {
       bot.sendMessage(questionGroup.getQuestionDescriptions());

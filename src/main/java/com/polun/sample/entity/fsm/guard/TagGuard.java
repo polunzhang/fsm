@@ -4,10 +4,10 @@ import com.polun.fsm.context.Context;
 import com.polun.fsm.guard.Guard;
 import com.polun.sample.entity.community.UserId;
 import com.polun.sample.entity.community.chatroom.Message;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class TagGuard implements Guard<SampleState, Event> {
+public class TagGuard implements Guard<SampleState, SampleEvent> {
 
   private final UserId target;
 
@@ -16,7 +16,7 @@ public class TagGuard implements Guard<SampleState, Event> {
   }
 
   @Override
-  public boolean test(Context<SampleState, Event> context) {
+  public boolean test(Context<SampleState, SampleEvent> context) {
     return context.getPayload(Message.class).stream()
         .anyMatch(message -> message.tags().contains(target));
   }

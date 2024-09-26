@@ -6,10 +6,10 @@ import com.polun.sample.entity.bot.Bot;
 import com.polun.sample.entity.bot.QuestionGroup;
 import com.polun.sample.entity.community.Community;
 import com.polun.sample.entity.community.broadcast.Broadcast;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 
-public class SendQuestioningResult implements Action<SampleState, Event> {
+public class SendQuestioningResult implements Action<SampleState, SampleEvent> {
 
   private final Bot bot;
 
@@ -18,7 +18,7 @@ public class SendQuestioningResult implements Action<SampleState, Event> {
   }
 
   @Override
-  public void run(Context<SampleState, Event> context) {
+  public void run(Context<SampleState, SampleEvent> context) {
     QuestionGroup questionGroup = bot.getQuestionGroup();
 
     String result =

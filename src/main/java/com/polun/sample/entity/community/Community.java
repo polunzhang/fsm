@@ -9,7 +9,7 @@ import com.polun.sample.entity.community.forum.Comment;
 import com.polun.sample.entity.community.forum.Forum;
 import com.polun.sample.entity.community.forum.Post;
 import com.polun.sample.entity.community.forum.PostId;
-import com.polun.sample.entity.fsm.Event;
+import com.polun.sample.entity.fsm.SampleEvent;
 import com.polun.sample.entity.fsm.SampleState;
 import com.polun.sample.utils.LogHelper;
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class Community {
   private final List<User> onlineUsers;
 
   @Getter(AccessLevel.NONE)
-  private final List<ContextObserver<SampleState, Event>> observers;
+  private final List<ContextObserver<SampleState, SampleEvent>> observers;
 
   @Getter(AccessLevel.NONE)
   @Setter
-  private ContextParser<SampleState, Event> contextParser;
+  private ContextParser<SampleState, SampleEvent> contextParser;
 
   public Community(ChatRoom chatroom, Forum forum, Broadcast broadcast) {
     this.chatroom = chatroom;
@@ -120,7 +120,7 @@ public class Community {
     return onlineUsers.size();
   }
 
-  public void subscribe(ContextObserver<SampleState, Event> observer) {
+  public void subscribe(ContextObserver<SampleState, SampleEvent> observer) {
     observers.add(observer);
   }
 }
