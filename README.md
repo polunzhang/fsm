@@ -104,7 +104,7 @@ The method defines a guard for transitions in the FSM, which evaluates the conte
         // Check if the context meets the required condition
         return true;
         };
-        }
+  }
 ```
 
 ---
