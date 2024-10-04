@@ -47,9 +47,26 @@ This method is used to construct the FSM with its initial state, possible states
   }
 ```
 
+## 3. Define Context
+
+This method creates a context that holds the event and an optional payload. This context is passed during the handling of the FSM.
+
+```java
+  private Context<S, E> buildContext() {
+    return new ContextBuilder<S, E>()
+        // The event associated with the context
+        .withEvent(event)
+        // Set any type of payload that can be accessed using context.getPayload(Class<T>) in actions or guards
+        .withPayload(anyTypePayload)
+        .build();
+  }
+```
+
 ---
 
-## 3. Define Transition
+---
+
+## 4. Define Transition
 
 The method defines the transition between states, triggered by a specific event, guarded by conditions, and optionally executes actions.
 ```java
@@ -70,7 +87,7 @@ The method defines the transition between states, triggered by a specific event,
 ```
 ---
 
-## 3. Define Trigger
+## 5. Define Trigger
 
 The method defines the trigger for transitions between states, specifying the event that the FSM listens to, guarded by conditions, and executing a required action when the trigger is activated.
 
@@ -89,7 +106,7 @@ The method defines the trigger for transitions between states, specifying the ev
 
 ---
 
-## 4. Define Guard
+## 6. Define Guard
 
 The method defines a guard for transitions in the FSM, which evaluates the context to determine if the transition should proceed based on specific conditions.
 
@@ -109,24 +126,7 @@ The method defines a guard for transitions in the FSM, which evaluates the conte
 
 ---
 
-## 5. Define Context
-
-This method creates a context that holds the event and an optional payload. This context is passed during the handling of the FSM.
-
-```java
-  private Context<S, E> buildContext() {
-    return new ContextBuilder<S, E>()
-        // The event associated with the context
-        .withEvent(event)
-        // Set any type of payload that can be accessed using context.getPayload(Class<T>) in actions or guards
-        .withPayload(anyTypePayload)
-        .build();
-  }
-```
-
----
-
-## 6. Define Action
+## 7. Define Action
 
 This method defines what happens when an action is triggered within a transition.
 
