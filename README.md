@@ -1,94 +1,199 @@
-# FSM Module (有限狀態機模組)
 
-## Quick Start | 快速入門
+# FSM Module
 
-This section provides a simple example to help you quickly understand how to use the FSM module. You'll see how to define states, add transitions, and use triggers to control the flow of your finite state machine.
+- This document explains the usage of a finite state machine (FSM) in Java. The methods below demonstrate how to create and handle different components of the FSM.
 
-以下提供了一個簡單的範例，幫助你快速了解如何使用這個FSM模組。你將學到如何定義狀態、增加轉移規則，以及使用觸發器來控制狀態機的流程。
-
-### 1. Install the module | 安裝模組
-
-安裝方法可以參考以下指令：
-
-### 2. Initialize FSM | 初始化有限狀態機
-
-範例展示如何設置一個基本的有限狀態機。
-
-### 3. Key Concepts | 關鍵概念
-
-- **States (狀態)**: 定義使用 `addState()` 來代表有限狀態機中的不同階段。
-- **Transitions (轉移)**: 定義使用 `addTransition()` 來指定狀態之間的轉換規則。
-- **Triggers (觸發器)**: 使用 `onTrigger()` 來定義觸發狀態轉移的條件或事件。
-- **Actions (行為)**: 使用 `onAction()` 來定義進入或退出某個狀態時應該執行的操作。
-
-這個範例展示了如何快速定義狀態機、設置狀態轉換，並使用觸發器來控制狀態的流動。您可以根據需求進行自定義，增加更多的狀態、轉移以及更複雜的邏輯。
-
-此範例展示了如何快速定義狀態機、設置狀態轉換以及使用觸發器來控制狀態流。你可以根據需求擴展此範例，添加更多的狀態、轉移和複雜的邏輯。
+![ood.png](img%2Food.png)
 
 ---
 
-## Introduction | 介紹
+# Finite State Machine Example
 
-This FSM module is designed to maximize the flexibility of writing behaviors for social bots while enhancing developer productivity. It is built based on strict design principles and incorporates structural design patterns from the Gang of Four (GoF). The module follows a bottom-up approach, where design patterns are applied progressively according to specific needs and constraints.
+- This section provides a simple example to help you quickly understand how to use the FSM module. You'll learn how to define states, add transitions, and use triggers to control the flow of your finite state machine.
 
-此FSM模組旨在幫助開發者更靈活地撰寫行為，同時提升開發生產力。它基於一些嚴格的設計原則，並融合了Gang of Four設計模式中的結構型設計模式，採用bottom-up的方式設計，根據需求逐步套用合適的設計模式。
+![fsm_flow.png](img%2Ffsm_flow.png)
 
-## Key Features | 主要功能
+---
 
-- **Open-Closed Principle (OCP)**: 
-   - 模組遵循開放封閉原則 (OCP)，允許添加新狀態、轉移、觸發器、守衛以及行為，而無需修改現有程式碼。
-   - 狀態、轉換、觸發器、守衛和行為的擴展可以在不修改既有程式碼的情況下完成。
-  
-- **Support for Sub-state Machines**: 
-   - 支援狀態機嵌套，允許在狀態中包含其他子狀態機，並支援無限深度的嵌套。
-   - 支援狀態機的嵌套結構，允許無限深度的子狀態機層次。
-   
+## 1. Handle FSM Context
+
+This method shows how to initialize the FSM and handle the provided context.
+
+- The generic type S represents the ID of the State, and the generic type E represents the Event. Both types can be primitive types, enums, or objects.
+
+```java
+  private void finiteStateMachineHandleContext() {
+    FiniteStateMachine<S, E> finiteStateMachine = buildFiniteStateMachine();
+    finiteStateMachine.handle(context);
+  }
+```
+
+---
+
+## 2. Define the Finite State Machine
+
+This method is used to construct the FSM with its initial state, possible states, and transitions.
+
+```java
+  private FiniteStateMachine<S, E> buildFiniteStateMachine() {
+    return new FiniteStateMachineBuilder<S, E>()
+        // Set the initial state of the finite state machine
+        .initialState(stateId)
+        // Define all possible states
+        .states(state1, state2, state3)
+        // Define all transitions between states
+        .transitions(transition1, transition2, transition3)
+        .build();
+  }
+```
+
+---
+
+## 3. Define Transition
+
+The method defines the transition between states, triggered by a specific event, guarded by conditions, and optionally executes actions.
+```java
+  private Transition<S, E> buildTransition() {
+    return Transition.<S, E>builder()
+        // The source state ID of the transition rule
+        .source(sourceStateId)
+        // The target state ID of the transition rule
+        .target(targetStateId)
+        // The event that triggers the transition
+        .event(triggerEvent)
+        // A guard that checks if the transition condition is met when context.getEvent() matches
+        .guard(guard)
+        // The action to execute when the transition is triggered (nullable)
+        .action(action)
+        .build();
+  }
+```
+---
+
+## 3. Define Trigger
+
+The method defines the trigger for transitions between states, specifying the event that the FSM listens to, guarded by conditions, and executing a required action when the trigger is activated.
+
+```java
+  private Trigger<S, E> buildTriggers() {
+        return new TriggerBuilder<S, E>()
+        // The event that the FSM listens to when handling the context
+        .event(event)
+        // A nullable guard to validate the transition
+        .guard(guard)
+        // A non-null action to execute
+        .action(action)
+        .build();
+        }
+```
+
+---
+
+## 4. Define Guard
+
+The method defines a guard for transitions in the FSM, which evaluates the context to determine if the transition should proceed based on specific conditions.
+
+
+```java
+  private Guard<S, E> buildGuard() {
+        return (context) -> {
+
+        // Use context.getPayload(Class<T>) to retrieve the assigned payload
+        Optional<String> payload = context.getPayload(String.class);
+
+        // Check if the context meets the required condition
+        return true;
+        };
+        }
+```
+
+---
+
+## 5. Define Context
+
+This method creates a context that holds the event and an optional payload. This context is passed during the handling of the FSM.
+
+```java
+  private Context<S, E> buildContext() {
+    return new ContextBuilder<S, E>()
+        // The event associated with the context
+        .withEvent(event)
+        // Set any type of payload that can be accessed using context.getPayload(Class<T>) in actions or guards
+        .withPayload(anyTypePayload)
+        .build();
+  }
+```
+
+---
+
+## 6. Define Action
+
+This method defines what happens when an action is triggered within a transition.
+
+```java
+  private Action<S, E> buildAction() {
+    return (context) -> {
+
+      // Use context.getPayload(Class<T>) to retrieve the assigned payload
+      Optional<String> payload = context.getPayload(String.class);
+
+      // Execute the desired action based on the context
+    };
+  }
+```
+---
+
+## 8. Define Generic State
+
+This method defines a generic state within the FSM.
+
+```java
+  private State<S, E> buildGenericState() {
+    return new StateBuilder<S, E>()
+        // The ID of the state; triggers will fire depending on this ID
+        .id(currentStateId)
+        // Entry action to execute when entering the state
+        .entryAction(entryAction)
+        // Exit action to execute when exiting the state
+        .exitAction(exitAction)
+        .build();
+  }
+```
+
+---
+
+## 9. Build Composite State
+
+This method defines a composite state, which can contain sub-states and their transitions.
+
+```java
+  private State<S, E> buildCompositeState() {
+    return new StateBuilder<S, E>()
+        // Build the state (refer to buildGenericState())
+        .id(stateId)
+        .entryAction(entryAction)
+        .exitAction(exitAction)
+
+        // Set properties of the sub-state machine (refer to buildFiniteStateMachine())
+        .initialState(initialStateId)
+        .states(states)
+        .transitions(transitions)
+
+        // Build the composite sub-state machine
+        .buildCompositeState();
+  }
+```
+---
+
+## Key Features
+
+- **Support for Sub-state Machines**:
+  - Supports nested state machines, allowing states to contain other sub-state machines, with unlimited depth for nesting.
+  - Supports the hierarchical structure of state machines, enabling the inclusion of sub-state machines with unlimited depth.
+
 - **Plugin-based Architecture**:
-   - 子狀態機的功能設計為插件，保持核心模組的輕量化，僅當需要時才會加入子狀態機的功能。
-   - 子狀態機的功能設計為插件，可選擇性地添加，保持核心模組的輕量化與模組化。
+  - The functionality of sub-state machines is designed as a plugin, keeping the core module lightweight and only adding sub-state machine features when necessary.
+  - The sub-state machine feature is designed as a plugin, allowing for selective inclusion, maintaining the modularity and lightweight nature of the core module.
 
-- **Highly Extensible**: 
-   - 模組具有高度的擴展性，開發者可以根據需求輕鬆地修改和擴展，同時遵循Gang of Four設計模式。
-   - 模組具有高度擴展性，並使用Gang of Four的設計模式，靈活可調整。
-
-## Components Overview | 元件概覽
-
-This section provides an overview of each key component in the FSM module. The following components form the building blocks of the finite state machine system. Each component is explained in detail, with its responsibility and relationship to other components illustrated in class diagrams.
-
-接下來的部分將提供FSM模組內各主要元件的概覽。這些元件構成有限狀態機系統的基礎，並將以類別圖講解每個元件的職責及其相互關係。
-
-### 1. **State (狀態)**
-
-   - **Description**: Represents a specific state in the FSM. Each state can have multiple transitions to other states.
-   - **職責**: 狀態的主要職責是定義當前狀態的行為，並定義其與其他狀態的轉移條件。
-   
-### 2. **Transition (轉移)**
-
-   - **Description**: Defines the logic for transitioning from one state to another. It can include triggers and guards.
-   - **職責**: 管理狀態之間的轉換，包括觸發條件（Trigger）和守衛條件（Guard）。
-   
-### 3. **Trigger (觸發器)**
-
-   - **Description**: Determines when a transition between states should be initiated.
-   - **職責**: 觸發器決定何時啟動狀態間的轉換。
-   
-### 4. **Guard (守衛)**
-
-   - **Description**: A condition that must be true for a transition to occur. Guards help refine the logic of state transitions.
-   - **職責**: 守衛條件必須成立，才能允許狀態之間的轉換。
-   
-### 5. **Action (行為)**
-
-   - **Description**: Defines what should happen when a transition occurs or when entering/exiting a state.
-   - **職責**: 行為定義了在狀態轉移或進入/退出狀態時所執行的操作。
-   
-### 6. **Sub-state Machine (子狀態機)**
-
-   - **Description**: A nested state machine that exists within another state, allowing for complex state hierarchies.
-   - **職責**: 子狀態機是一個嵌套的狀態機，允許在主狀態內部定義更複雜的狀態層級。
-
-## Conclusion | 結論
-
-This FSM module offers a flexible and powerful solution for building finite state machines with extensible features, such as nested sub-state machines, and adheres to fundamental design principles like the Open-Closed Principle. Its modular design allows developers to inject specific behavior easily while maintaining a clean codebase.
-
-此FSM模組提供了一個靈活且強大的解決方案，能構建具有擴展功能的有限狀態機（如支持嵌套的子狀態機），並遵循基本的設計原則如開放封閉原則。模組化的設計讓開發者能輕鬆注入自定義行為，同時保持乾淨的代碼結構。
+- **Highly Extensible**:
+  - The module is highly extensible, allowing developers to easily modify and extend it based on their requirements.
